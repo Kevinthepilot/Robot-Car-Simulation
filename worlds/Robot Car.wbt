@@ -6,8 +6,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.6196169475615524 -0.5321498047287194 0.5769674372282116 4.061712943364096
-  position 3.3725521792012927 -0.048746748791877736 2.3333085459345866
+  orientation -0.4439661291406841 -0.45221356636966176 0.77356122354153 4.4762762863116965
+  position 3.1270689591771728 2.4678512581727565 2.4087055891860047
 }
 TexturedBackground {
 }
@@ -44,7 +44,7 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.050003442723277766 0.060000001823789756 1.8829861751729908e-06
+        translation 0.050003442723277766 0.060000001823789756 1.8829861751727665e-06
         rotation -0.35748617171691455 0.6603805764331785 -0.6603795357981407 3.8282536931079543
         children [
           DEF WHEEL Shape {
@@ -103,7 +103,7 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.04999655729311627 0.05999999817434007 1.883016582254119e-06
+        translation -0.04999655729311627 0.05999999817434007 1.883016582259933e-06
         rotation 0.9992486299568606 -0.02740593063252714 0.027406030276236712 1.5715516586143994
         children [
           USE WHEEL
@@ -180,14 +180,168 @@ Robot {
   controller "robotcar"
 }
 Solid {
-  translation 3.3 0.06 0
+  translation 3.3 0.05 0
   children [
-    Shape {
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
       geometry Box {
         size 0.5 0.1 0.1
       }
     }
   ]
+  name "wall"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.1 0.25 0
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(1)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.25 0.5 0
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(7)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.25 1 0
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(10)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.59 0.75 0
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(8)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.3 -0.3 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(2)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.8 0.55 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(3)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.8 0.95 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(9)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.3 0.95 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(13)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.8 -0.3 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(4)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.75 -5.0981e-08 0
+  rotation 0 0 1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(5)"
+  boundingObject USE WALL
 }
 Solid {
   translation 3.55 0 0
@@ -620,4 +774,64 @@ Solid {
   name "rectangle arena"
   model "rectangle arena"
   locked TRUE
+}
+Solid {
+  translation 2.55 0.2 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(6)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.55 1.3 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(11)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.05 1.3 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(12)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.3 1.3 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 0.5 0.1 0.1
+      }
+    }
+  ]
+  name "wall(14)"
+  boundingObject USE WALL
 }
