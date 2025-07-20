@@ -2,20 +2,21 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/factory/containers/protos/WoodenBox.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.4439661291406841 -0.45221356636966176 0.77356122354153 4.4762762863116965
-  position 3.1270689591771728 2.4678512581727565 2.4087055891860047
+  orientation -0.4305552228486469 -0.3360403237803339 0.8376748180955186 4.2996684917366474
+  position 3.299898507631116 5.10840839629307 3.409559010043468
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Robot {
-  translation 3.66177 -0.119577 0.039721
-  rotation 3.748105583136017e-10 -4.19594838830114e-08 0.9999999999999991 -3.1237305811400824
+  translation 3.661770011121687 -0.11957699974002758 0.03971909827464204
+  rotation 1.3835569179542944e-07 -3.994136240479347e-08 0.9999999999999897 -3.123730581148788
   children [
     DEF compass Compass {
     }
@@ -31,7 +32,7 @@ Robot {
     }
     DEF WHEEL1 HingeJoint {
       jointParameters HingeJointParameters {
-        position 69.06016951895451
+        position 69.06016951679311
         axis 0 1 0
         anchor 0.05 0.06 0
       }
@@ -44,8 +45,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.050003442723277766 0.060000001823789756 1.8829861751727665e-06
-        rotation -0.35748617171691455 0.6603805764331785 -0.6603795357981407 3.8282536931079543
+        translation 0.05000344272327369 0.060000001823789756 1.8829861826205834e-06
+        rotation -0.3574861709120364 0.6603805766510332 -0.6603795360159935 3.8282536916806085
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -67,7 +68,7 @@ Robot {
     }
     DEF WHEEL2 HingeJoint {
       jointParameters HingeJointParameters {
-        position 200.52494543240522
+        position 200.52494543024224
         axis 0 1 0
         anchor 0.05 -0.06 0
       }
@@ -80,8 +81,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.050003444772721534 -0.059999998174488686 1.8791261992759618e-06
-        rotation 0.7661002272432121 0.4544716297262018 -0.4544732990967776 1.8341444461245677
+        translation 0.05000344477271748 -0.059999998174488686 1.8791262067064417e-06
+        rotation 0.7661002280231883 0.45447162906880345 -0.45447329843937656 1.834144445141554
         children [
           USE WHEEL
         ]
@@ -93,7 +94,7 @@ Robot {
     }
     DEF WHEEL3 HingeJoint {
       jointParameters HingeJointParameters {
-        position 69.0601988498348
+        position 69.06019884767103
         axis 0 1 0
         anchor -0.05 0.06 0
       }
@@ -103,8 +104,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.04999655729311627 0.05999999817434007 1.883016582259933e-06
-        rotation 0.9992486299568606 -0.02740593063252714 0.027406030276236712 1.5715516586143994
+        translation -0.049996557293120344 0.05999999817434007 1.883016589705832e-06
+        rotation 0.999248629897605 -0.027405931712784812 0.027406031356498634 1.5715516586737004
         children [
           USE WHEEL
         ]
@@ -116,7 +117,7 @@ Robot {
     }
     DEF WHEEL4 HingeJoint {
       jointParameters HingeJointParameters {
-        position 200.5249752390411
+        position 200.52497523687666
         axis 0 1 0
         anchor -0.05 -0.06 0
       }
@@ -126,8 +127,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.049996555243671865 -0.060000001823938484 1.87915660517568e-06
-        rotation 0.9319454403761752 -0.2563954118420311 0.25639635127749416 1.641222722175188
+        translation -0.04999655524367592 -0.060000001823938484 1.8791566126064416e-06
+        rotation 0.9319454398577005 -0.2563954127843032 0.2563963522197687 1.641222722730143
         children [
           USE WHEEL
         ]
@@ -178,6 +179,173 @@ Robot {
     mass 1
   }
   controller "robotcar"
+}
+Robot {
+  translation 2.675772104103019 2.8959674322860476 0.03972091246710382
+  rotation -0.012358795377560478 -4.8240681957008915e-05 0.9999236260083328 -0.005015307179585982
+  children [
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 86.33983999999921
+        axis 0 0 1
+        anchor 0 0.00280235 0.070858
+      }
+      device [
+        RotationalMotor {
+          name "lidarMotor"
+        }
+      ]
+      endPoint Lidar {
+        translation 4.1088968130543805e-19 0.0028023499999999995 0.070858
+        rotation -1.7328999964244433e-06 -6.421579986750125e-05 -0.999999997936664 0.05395800000000665
+        children [
+          Compass {
+            name "lidarCompass"
+          }
+          Shape {
+            appearance PBRAppearance {
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.1
+              radius 0.05
+            }
+          }
+        ]
+        horizontalResolution 1
+        fieldOfView 0.1
+        numberOfLayers 1
+        maxRange 4
+      }
+    }
+    DEF compass Compass {
+    }
+    DEF BODY Shape {
+      appearance PBRAppearance {
+        baseColor 0 0.145098 0.145098
+        roughness 1
+        metalness 0
+      }
+      geometry Box {
+        size 0.2 0.1 0.05
+      }
+    }
+    DEF WHEEL1 HingeJoint {
+      jointParameters HingeJointParameters {
+        position 55.32884177196838
+        axis 0 1 0
+        anchor 0.05 0.06 0
+      }
+      device [
+        PositionSensor {
+          name "encoder1"
+        }
+        RotationalMotor {
+          name "wheel1"
+        }
+      ]
+      endPoint Solid {
+        translation 0.04999962911859798 0.060000001823789756 3.9064597129440455e-06
+        rotation 0.061070038550005534 0.7057879890576004 -0.7057859200164943 3.019606782759325
+        children [
+          DEF WHEEL Shape {
+            appearance PBRAppearance {
+              baseColor 0.305882 0.898039 0.25098
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.02
+              radius 0.04
+              subdivision 24
+            }
+          }
+        ]
+        boundingObject USE WHEEL
+        physics Physics {
+        }
+      }
+    }
+    DEF WHEEL2 HingeJoint {
+      jointParameters HingeJointParameters {
+        position 190.30715999262654
+        axis 0 1 0
+        anchor 0.05 -0.06 0
+      }
+      device [
+        PositionSensor {
+          name "encoder2"
+        }
+        RotationalMotor {
+          name "wheel2"
+        }
+      ]
+      endPoint Solid {
+        translation 0.049998921598264884 -0.059999998174488686 -3.7728800767461755e-06
+        rotation -0.09839044707922827 0.7036745278456407 -0.7036771125912539 3.3377415038761815
+        children [
+          USE WHEEL
+        ]
+        name "solid(1)"
+        boundingObject USE WHEEL
+        physics Physics {
+        }
+      }
+    }
+    DEF WHEEL3 HingeJoint {
+      jointParameters HingeJointParameters {
+        position 55.32891780869917
+        axis 0 1 0
+        anchor -0.05 0.06 0
+      }
+      device [
+        RotationalMotor {
+          name "wheel3"
+        }
+      ]
+      endPoint Solid {
+        translation -0.050000399999999154 0.06 3.906470000088082e-06
+        rotation 0.7113067474652218 -0.4970115160016922 0.4970133438572317 1.9050478376607471
+        children [
+          USE WHEEL
+        ]
+        name "solid(2)"
+        boundingObject USE WHEEL
+        physics Physics {
+        }
+      }
+    }
+    DEF WHEEL4 HingeJoint {
+      jointParameters HingeJointParameters {
+        position 190.30723673690835
+        axis 0 1 0
+        anchor -0.05 -0.06 0
+      }
+      device [
+        RotationalMotor {
+          name "wheel4"
+        }
+      ]
+      endPoint Solid {
+        translation -0.05000107854565794 -0.060000001823938484 -3.7728391127588544e-06
+        rotation 0.48488976621368296 0.6184169706286116 -0.6184192469997766 2.2386225073555144
+        children [
+          USE WHEEL
+        ]
+        name "solid(3)"
+        boundingObject USE WHEEL
+        physics Physics {
+        }
+      }
+    }
+  ]
+  name "Lidar Scanner"
+  boundingObject USE BODY
+  physics Physics {
+    density -1
+    mass 1
+  }
+  controller "slam"
 }
 Solid {
   translation 3.3 0.05 0
@@ -291,7 +459,7 @@ Solid {
       appearance PBRAppearance {
       }
       geometry Box {
-        size 0.5 0.1 0.1
+        size 0.5 0.1 0.4
       }
     }
   ]
@@ -405,6 +573,10 @@ Solid {
         size 10 10
       }
       locked TRUE
+    }
+    WoodenBox {
+      translation -1.25 3 0.2
+      size 0.1 0.1 0.3
     }
     Solid {
       translation 5.005 0 0.05
@@ -813,11 +985,131 @@ Solid {
       appearance PBRAppearance {
       }
       geometry Box {
-        size 0.5 0.1 0.1
+        size 0.5 0.1 0.4
       }
     }
   ]
   name "wall(12)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.67 2.21 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.67 4.66 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(6)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.27 3.55 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(1)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.92 3.55 0
+  rotation 0 0 1 3.14159
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(4)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.31 2.88 0
+  rotation 0 0 -1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(2)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 3.31 4.08 0
+  rotation 0 0 -1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(5)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.05 2.88 0
+  rotation 0 0 -1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(3)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 2.05 4.02 0
+  rotation 0 0 -1 -1.5707953071795862
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+      }
+      geometry Box {
+        size 1.3 0.1 0.4
+      }
+    }
+  ]
+  name "bigwall(7)"
   boundingObject USE WALL
 }
 Solid {

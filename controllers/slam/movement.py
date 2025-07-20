@@ -4,6 +4,7 @@ class RobotMovement():
     def __init__(self, robot, timestep):
         self.speed = 5
         self.wheelPeri = 0.04 * 6.28
+        self.wheelBase = 0.06*2
         self.robot = robot
         self.timestep = timestep
         
@@ -31,18 +32,8 @@ class RobotMovement():
         
         
     def move(self, direction):
-        distance = 0.25
-        initial = self.encoder1.getValue()
-        rc = abs(distance) / self.wheelPeri * 6.28
-        self.isGoing = True
         for motor in self.motors:
             motor.setVelocity(self.speed * direction)
-    
-        while abs(self.encoder1.getValue() - initial) <= rc:
-            if self.robot.step(self.timestep) == -1:
-                break
-        self.stop()
-        self.isGoing = False
 
     
     def stop(self):
@@ -51,27 +42,12 @@ class RobotMovement():
     
     def turn(self, direction):
         #direction == 1 -> turn right
-        self.isGoing = True
-        initialHeading = self._computeHeading()
-        targetHeading = (initialHeading + 90 * -1 * direction) % 360
     
         for i, motor in enumerate(self.motors):
             if i % 2 == 1:
                 motor.setVelocity(-self.speed * direction)
             else:
                 motor.setVelocity(self.speed * direction)
-    
-        while True:
-            current = self._computeHeading()
-            print(current)
-            diff = (targetHeading - current + 180) % 360 - 180 
-            if abs(diff) < 5: 
-                break
-            if self.robot.step(self.timestep) == -1:
-                break
-    
-        self.stop()
-        self.isGoing = False
     
     def _computeHeading(self):
         values = self.compass.getValues()
