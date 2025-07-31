@@ -6,7 +6,7 @@ def manhattan_distance(x1, y1, x2, y2):
 class Algo:
     def __init__(self):
         self.arr = []
-        self.filename = "testcase.txt"
+        self.filename = "map.txt"
         self.movePath = []
 
     def readTest(self):
@@ -17,11 +17,11 @@ class Algo:
         rows, cols = map(int, header)
 
         for line in lines[1:]:
-            row = list(map(int, line.strip().split()))
+            row = list(map(float, line.strip().split()))
             self.arr.append(row)
 
-        for row in self.arr:
-            print(row)
+        # for row in self.arr:
+            # print(row)
 
     def translate(self, x, y):
         if x == y: return 'U'
@@ -38,25 +38,13 @@ class Algo:
             (x == 'R' and y == 'U')
         ): return 'L'
 
-    def a_star(self):
+    def a_star(self, start, end, k_value):
         xd = [0, 0, 1, -1]
         yd = [1, -1, 0, 0]
-        dirChar = ['R', 'L', 'D', 'U']
+        dirChar = ['U', 'D', 'L', 'R']
 
         rows = len(self.arr)
         cols = len(self.arr[0])
-
-        start = end = None
-        for i in range(rows):
-            for j in range(cols):
-                if self.arr[i][j] == -1:
-                    start = (i, j)
-                elif self.arr[i][j] == 2:
-                    end = (i, j)
-
-        if not start or not end:
-            print("Missing start or end point.")
-            return
 
         open_set = []
         heapq.heappush(open_set, (0 + manhattan_distance(*start, *end), 0, start))
@@ -65,7 +53,7 @@ class Algo:
         direction = {}
 
         g_score = [[float('inf')] * cols for _ in range(rows)]
-        g_score[start[0]][start[1]] = 0
+        g_score[start[1]][start[0]] = 0
 
         while open_set:
             _, cost, (x, y) = heapq.heappop(open_set)
@@ -82,10 +70,10 @@ class Algo:
             for i in range(4):
                 newX, newY = x + xd[i], y + yd[i]
 
-                if 0 <= newX < rows and 0 <= newY < cols and self.arr[newX][newY] != 1:
+                if 0 <= newX < rows and 0 <= newY < cols and self.arr[newY][newX] < k_value:
                     tentative_g = cost + 1
-                    if tentative_g < g_score[newX][newY]:
-                        g_score[newX][newY] = tentative_g
+                    if tentative_g < g_score[newY][newX]:
+                        g_score[newY][newX] = tentative_g
                         f_score = tentative_g + manhattan_distance(newX, newY, *end)
                         heapq.heappush(open_set, (f_score, tentative_g, (newX, newY)))
                         came_from[(newX, newY)] = (x, y)

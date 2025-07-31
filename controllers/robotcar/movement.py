@@ -2,7 +2,7 @@ import math
 
 class RobotMovement():
     def __init__(self, robot, timestep):
-        self.speed = 5
+        self.speed = 10
         self.wheelPeri = 0.04 * 6.28
         self.robot = robot
         self.timestep = timestep
@@ -63,7 +63,6 @@ class RobotMovement():
     
         while True:
             current = self._computeHeading()
-            print(current)
             diff = (targetHeading - current + 180) % 360 - 180 
             if abs(diff) < 5: 
                 break

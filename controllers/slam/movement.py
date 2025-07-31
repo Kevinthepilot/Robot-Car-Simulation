@@ -31,23 +31,50 @@ class RobotMovement():
             motor.setVelocity(0.0)
         
         
-    def move(self, direction):
+    def move(self, direction, distance=None):
+        initial = self.encoder1.getValue()
+        self.isGoing = True
         for motor in self.motors:
             motor.setVelocity(self.speed * direction)
+        
+        if (distance != None):
+            rc = abs(distance) / self.wheelPeri * 6.28
+            while abs(self.encoder1.getValue() - initial) <= rc:
+                if self.robot.step(self.timestep) == -1:
+                    break
+            self.stop()
+        
+        self.isGoing = False
 
     
     def stop(self):
         for motor in self.motors:
             motor.setVelocity(0)
     
-    def turn(self, direction):
+    def turn(self, direction, is_90_degree=False):
         #direction == 1 -> turn right
-    
+        self.isGoing = True
+        initialHeading = self._computeHeading()
         for i, motor in enumerate(self.motors):
             if i % 2 == 1:
                 motor.setVelocity(-self.speed * direction)
             else:
                 motor.setVelocity(self.speed * direction)
+                
+        if is_90_degree:
+ 
+            targetHeading = (initialHeading + 90 * -1 * direction) % 360
+            while True:
+                current = self._computeHeading()
+                diff = (targetHeading - current + 180) % 360 - 180 
+                if abs(diff) < 5: 
+                    break
+                if self.robot.step(self.timestep) == -1:
+                    break
+            self.stop()
+    
+
+        self.isGoing = False
     
     def _computeHeading(self):
         values = self.compass.getValues()

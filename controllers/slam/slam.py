@@ -2,15 +2,19 @@
 from controller import Robot
 from controller import Keyboard
 from movement import RobotMovement
+from algorithm import Algo
 import numpy as np
 import math
 import matplotlib.pyplot as plt
 import time
 from bresenham import bresenham
 
+fig, ax = plt.subplots()
+data = np.random.rand(45, 45) 
+img = ax.imshow(data, cmap='Oranges', vmin=0, vmax=1)
 
 class LidarHandler:
-    def __init__(self, robot, timestep, map_width, map_height):
+    def __init__(self, robot, timestep, map_width, map_height, initHead):
         self.lidar = robot.getLidar("lidar")
         self.lidar.enable(timestep)
 
@@ -23,11 +27,16 @@ class LidarHandler:
 
         self.map_width = map_width
         self.map_height = map_height
-        self.map = [[0 for _ in range(map_width)] for _ in range(map_height)]
+        self.map = [[0.0 for _ in range(map_width)] for _ in range(map_height)]
+        self.cost_map = [[0.0 for _ in range(map_width)] for _ in range(map_height)]
         self.carStatus = {
             "x": 0,
             "y": 0,
         }
+        self.iHead = initHead
+        
+        self.sub_conf = 0.2
+        self.add_conf = 0.5
 
 
     def _compute_heading(self, values):
@@ -39,8 +48,8 @@ class LidarHandler:
 
     def update_map(self):
         map_resolution = 0.25  # meters per grid cell
-    
         heading_deg = self._compute_heading(self.lidar_compass.getValues())
+        heading_deg = (heading_deg - self.iHead + 360) % 360
         heading_rad = math.radians(heading_deg)
     
         ranges = self.lidar.getRangeImage()
@@ -54,7 +63,7 @@ class LidarHandler:
         y_robot = self.carStatus['y']  # in grid units
     
         for i, distance in enumerate(ranges):
-            if distance == float('inf') or distance < 0.1:
+            if distance == float('inf') or distance < 0.2:
                 continue  # Skip bad readings
     
             distance_cells = distance / map_resolution  # convert to grid units
@@ -63,8 +72,8 @@ class LidarHandler:
             total_angle = heading_rad + beam_angle
     
             # Compute hit point in grid units
-            x_hit = distance_cells * math.cos(total_angle)
-            y_hit = distance_cells * math.sin(total_angle)
+            y_hit = distance_cells * math.cos(total_angle)
+            x_hit = distance_cells * math.sin(total_angle)
     
             map_x = int(x_robot + x_hit)
             map_y = int(y_robot + y_hit)
@@ -76,9 +85,33 @@ class LidarHandler:
             if 0 <= map_x < self.map_width and 0 <= map_y < self.map_height:
                 for x, y in bresenham(x_start, y_start, map_x, map_y):
                     if 0 <= x < self.map_width and 0 <= y < self.map_height:
-                        self.map[y][x] = 0  # Free
-                self.map[map_y][map_x] = 1  # Occupied
-
+                        self.map[y][x] -= self.sub_conf  # Free
+                        self.map[y][x] = max(-5, self.map[y][x])
+                self.map[map_y][map_x] += self.add_conf  # Occupied
+                self.map[y][x] = min(5, self.map[y][x])
+               
+        
+        self.update_cost_map(0.3, 3)
+    
+    def update_cost_map(self, decay_level, cell_num):
+        directions = np.arange(-cell_num, cell_num+1)
+        n = len(self.map)
+        m = len(self.map[0])
+        C_max = 1
+        
+        for i in range(0, n):
+            for j in range(0, m):
+                if self.map[i][j] < 1: continue
+                for dx in directions:
+                    for dy in directions:
+                        nx = dx + j
+                        ny = dy + i
+                        if nx >= 0 and nx < m and ny >= 0 and ny < n:
+                            dist = (dx**2 + dy**2) ** 0.5
+                            cost = min(1, self.map[i][j]) - decay_level * dist
+                            self.cost_map[ny][nx] = max(self.cost_map[ny][nx], cost)
+                 
+        
 
     def print_map(self):
         x = int(self.carStatus['x'])
@@ -93,8 +126,13 @@ class LidarHandler:
     
     def reset_map(self):
         self.map = self.map = [[0 for _ in range(self.map_width)] for _ in range(self.map_height)]
+   
+   
+        
 
 
+
+    
 
 # create the Robot instance.
 robot = Robot()
@@ -109,26 +147,21 @@ robotCar.init()
 robotCar.encoder1.enable(timestep)
 robotCar.encoder2.enable(timestep)
 robotCar.compass.enable(timestep)
-
-
-lidar = LidarHandler(robot, timestep, 30, 30)
-#STATES
 initialHeading = robotCar._computeHeading()
+
+#Lidar
+lidar = LidarHandler(robot, timestep, 50, 50, initialHeading)
+
+#STATES
 pr1 = robotCar.encoder1.getValue()
 pr2 = robotCar.encoder2.getValue()
 lastState = {
-    "x": 15.0,
-    "y": 15.0
+    "x": 25.0,
+    "y": 25.0
 }
 
-while robot.step(timestep) != -1:
-    key = keyboard.getKey()
-    lidar.lidar_motor.setVelocity(10)
-    lidar.carStatus = lastState
-    lidar.update_map()
-    #print(lidar.lidar.getRangeImage()[0])
-    #print(f"x: {int(lastState['x'])}  y: {int(lastState['y'])}")
-    
+def update_odometry():
+    global pr1, pr2, lastState
     en1 = robotCar.encoder1.getValue()
     en2 = robotCar.encoder2.getValue()
     heading = (robotCar._computeHeading() - initialHeading + 360) % 360 
@@ -138,14 +171,27 @@ while robot.step(timestep) != -1:
     dc = (dl + dr) / 2.0
     
     if abs(dc) > 0:
-        lastState["x"] += (dc * math.cos(heading)) / 0.25
-        lastState["y"] += (dc * math.sin(heading)) / 0.25
+        lastState["y"] += (dc * math.cos(heading)) / 0.25
+        lastState["x"] += (dc * math.sin(heading)) / 0.25
         pr1 = en1
         pr2 = en2
 
+#Algorithm
+algo = Algo()
+
+while robot.step(timestep) != -1:
+    key = keyboard.getKey()
+    lidar.lidar_motor.setVelocity(10)
+    lidar.carStatus = lastState
+    lidar.update_map()
+    #print(lidar.lidar.getRangeImage()[0])
+    #print(f"x: {int(lastState['x'])}  y: {int(lastState['y'])}")
+    
+    update_odometry()
+
 
     if (key == 87): #Go forward
-        robotCar.move(1)
+        robotCar.move(1, None)
         
     elif key == 83: #Go backward
         robotCar.move(-1)
@@ -155,9 +201,37 @@ while robot.step(timestep) != -1:
     elif key == 65: #Turn left
         robotCar.turn(-1)
         
-    elif key == 67:
-        lidar.print_map()
-        time.sleep(0.5)
+    elif key == 67: #Visualizing map
+        img.set_data(lidar.cost_map)
+        fig.canvas.draw()
+        fig.canvas.flush_events()
+        plt.pause(0.1)  
+    elif key == 91: #Saving the map
+        with open("map.txt", "w") as file:
+            file.write(f"{lidar.map_height} {lidar.map_width}\n")
+            for i in range(len(lidar.map)):
+                for j in range(len(lidar.map[0])):
+                    file.write(f"{lidar.cost_map[i][j]} ")
+                file.write("\n")
+            print("Map saved")
+    elif key == 61: #Pathfinding
+        algo.readTest()
+        algo.a_star((25, 24), (15, 33), 0.5)
+        path = algo.movePath
+        print(path)
+        facing = 'U'
+        for id, dir in enumerate(path):
+            i = algo.translate(facing, dir)
+            if i == 'U': robotCar.move(1, 0.25)
+            elif i == 'R': 
+                robotCar.turn(1, True)
+                robotCar.move(1, 0.25)
+            else: 
+                robotCar.turn(-1, True)
+                robotCar.move(1, 0.25)
+            facing = dir
+            update_odometry()
+        print("Destination reached")
 
     else: robotCar.stop()
 

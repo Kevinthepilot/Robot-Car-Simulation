@@ -21,23 +21,23 @@ robotCar.encoder1.enable(timestep)
 robotCar.encoder2.enable(timestep)
 robotCar.compass.enable(timestep)
 
-# algo = Algo()
-# algo.readTest()
-# algo.bfs()
-# path = algo.movePath
-# print(path)
+algo = Algo()
+algo.readTest()
+algo.a_star()
+path = algo.movePath
+print(path)
 
-# facing = 'U'
-# for id, dir in enumerate(path):
-    # i = algo.translate(facing, dir)
-    # if i == 'U': robotCar.move(1)
-    # elif i == 'R': 
-        # robotCar.turn(1)
-        # robotCar.move(1)
-    # else: 
-        # robotCar.turn(-1)
-        # robotCar.move(1)
-    # facing = dir
+facing = 'U'
+for id, dir in enumerate(path):
+    i = algo.translate(facing, dir)
+    if i == 'U': robotCar.move(1)
+    elif i == 'R': 
+        robotCar.turn(1)
+        robotCar.move(1)
+    else: 
+        robotCar.turn(-1)
+        robotCar.move(1)
+    facing = dir
 
 # lastTime = robot.getTime()
 
